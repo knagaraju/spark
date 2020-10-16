@@ -70,13 +70,16 @@ install_mvn() {
   MVN_BIN="$(command -v mvn)"
   echo "Using \`mvn\` bin : $MVN_BIN" 1>&2
   if [ "$MVN_BIN" ]; then
+     echo " install mvn test 1 " 1>&2
     local MVN_DETECTED_VERSION="$(mvn --version | head -n1 | awk '{print $3}')"
     echo "Using \`mvn\` detected version  : $MVN_DETECTED_VERSION" 1>&2
   fi
+  echo " install mvn MVN_DETECTED_VERSION : $MVN_DETECTED_VERSION" 1>&2
   if [ $(version $MVN_DETECTED_VERSION) -lt $(version $MVN_VERSION) ]; then
     local APACHE_MIRROR=${APACHE_MIRROR:-'https://www.apache.org/dyn/closer.lua?action=download&filename='}
-        
+     echo " install mvn APACHE_MIRROR : $APACHE_MIRROR " 1>&2   
     if [ $(command -v curl) ]; then
+       echo " install mvn test 3 " 1>&2  
       local TEST_MIRROR_URL="${APACHE_MIRROR}/maven/maven-3/${MVN_VERSION}/binaries/apache-maven-${MVN_VERSION}-bin.tar.gz"
       if ! curl -L --output /dev/null --silent --head --fail "$TEST_MIRROR_URL" ; then
         # Fall back to archive.apache.org for older Maven
@@ -84,12 +87,12 @@ install_mvn() {
         APACHE_MIRROR="https://archive.apache.org/dist"
       fi
     fi
-
+    echo " install mvn test 4 " 1>&2
     install_app \
       "${APACHE_MIRROR}/maven/maven-3/${MVN_VERSION}/binaries" \
       "apache-maven-${MVN_VERSION}-bin.tar.gz" \
       "apache-maven-${MVN_VERSION}/bin/mvn"
-
+    echo " install mvn test 5 " 1>&2
     MVN_BIN="${_DIR}/apache-maven-${MVN_VERSION}/bin/mvn"
     echo "Using \`mvn\` MVN_BIN  : $MVN_BIN" 1>&2
   fi
